@@ -11,19 +11,19 @@
  *-----------*/
 
 /* Interact with deque */
-const char& Deque::front() {
-	return head->c;
+const std::string& Deque::front() {
+	return head->str;
 }
 
-const char& Deque::back() {
-	return tail->c;
+const std::string& Deque::back() {
+	return tail->str;
 }
 
 /* Edit deque */
-void Deque::insertBack(const char &ch, const int &pr){
+void Deque::insertBack(const std::string &s, const int &pr){
 	struct Node* newNode = (struct Node*) malloc(sizeof(struct Node));	// Allocate space for a new node
 
-	newNode->c = ch;		// add information to new node
+	newNode->str = s;		// add information to new node
 	newNode->prec = pr;
 	newNode->next = NULL;	// new node is at the END; no node comes after it
 
@@ -39,10 +39,10 @@ void Deque::insertBack(const char &ch, const int &pr){
 	n++;		// increase list size
 }
 
-void Deque::insertFront(const char &ch, const int &pr) {
+void Deque::insertFront(const std::string &s, const int &pr) {
 	struct Node* newNode = (struct Node*) malloc(sizeof(struct Node));	// Allocate space for a new node
 
-	newNode->c = ch;			// Add information to new node
+	newNode->str = s;			// Add information to new node
 	newNode->prec = pr;
 	newNode->prev = NULL;		// Node is at the FRONT; no node comes before it
 
@@ -58,14 +58,9 @@ void Deque::insertFront(const char &ch, const int &pr) {
 	n++;		// increase list size
 }
 
-const char Deque::removeBack() {	// ADD THROWS
-/*	try {
-		// handle empty deque exception
-		if(head == NULL)
-			throw("Error: Can't remove item from empty deque!");
-*/
+const std::string Deque::removeBack() {
 	struct Node *temp = tail->prev;		// 
-	char ch = tail->c;					// store character to return
+	std::string s = tail->str;				// store character to return
 	tail = tail->prev;					// 
 
 		if(tail != NULL) {		
@@ -78,43 +73,25 @@ const char Deque::removeBack() {	// ADD THROWS
 		free(temp);		// free memory at (previous) tail node
 		n--;			// decrease size of list
 
-/*	}
-
-	// REMOVE CATCH
-	catch(const char* msg) {
-		std::cout << msg << '\n';
-	}
-*/
-
-	return ch;			// return char previously at end of list
+	return s;			// return char previously at end of list
 }
 
-const char Deque::removeFront() {	// ADD THROWS
-/*	try {
-		// handle empty deque exception
-		if(head == NULL)
-			throw("Error: Can't remove item from empty deque!");
-*/
-		struct Node *temp = head;			// 
-		char ch = head->c;					// store character to return
-		head = head->next;					// 
-		
-		if (head != NULL) {
-			head->prev = NULL;
-		} else {
-			head = NULL;
-			tail = NULL;
-		}
-
-		free(temp);		// free memory at (previous) head node
-		n--;			// decrease size of list
-/*	}
-
-	catch(const char* msg) {
-		std::cout << msg << '\n';
+const std::string Deque::removeFront() {
+	struct Node *temp = head;			// 
+	std::string s = head->str;				// store character to return
+	head = head->next;					// 
+	
+	if (head != NULL) {
+		head->prev = NULL;
+	} else {
+		head = NULL;
+		tail = NULL;
 	}
-*/
-	return ch;			// return char previously at front of list
+
+	free(temp);		// free memory at (previous) head node
+	n--;			// decrease size of list
+
+	return s;		// return char previously at front of list
 }
 
 /* REMOVE - TEST FUNCTIONS */
@@ -124,7 +101,7 @@ std::string Deque::printList() {
 	struct Node* ptr = head;
 
 	while (ptr != NULL) {
-		ss << ' ' << ptr->c << ' ';
+		ss << ' ' << ptr->str << ' ';
 		ptr = ptr->next;
 	}
 

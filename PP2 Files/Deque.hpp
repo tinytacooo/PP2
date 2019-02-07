@@ -15,8 +15,8 @@
  *   NODES   *
  *-----------*/
 struct Node {
-    char c;		        // operand/operator from expression
-    int prec = 1;		// precedence of operand/operator; determined by parenthesis/order
+    std::string str;		        // operand/operator from expression
+    int prec = 1;					// precedence of operand/operator; determined by parenthesis/order
     struct Node *prev;
     struct Node *next;
 };
@@ -32,13 +32,13 @@ public:
 	/* Interact with deque */
 	int size() const { return n; }
 	bool empty() const { return (head == NULL); }		// returns TRUE if empty
-	const char& front();	// ADD THROWS
-	const char& back();		// ADD THROWS
+	const std::string& front();		// ADD THROWS
+	const std::string& back();		// ADD THROWS
 	/* Edit deque */
-	void insertBack(const char &ch, const int &pr);
-	void insertFront(const char &ch, const int &pr);
-	const char removeBack();	// ADD THROWS
-	const char removeFront();	// ADD THROWS
+	void insertBack(const std::string &s, const int &pr);
+	void insertFront(const std::string &s, const int &pr);
+	const std::string removeBack();		// ADD THROWS
+	const std::string removeFront();	// ADD THROWS
 	/* REMOVE - TEST FUNCTIONS */
 	std::string printList();
 private:

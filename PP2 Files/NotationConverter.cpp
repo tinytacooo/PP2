@@ -11,27 +11,20 @@
  *   NOTATION CONVERTER   *
  *------------------------*/
 std::string NotationConverter::postfixToInfix(std::string inStr) {
-	std::cout << "NC CALLED\n";
-	Deque D;
+	Deque D;							// initialize deque to use
 
-/*	D.insertFront('a', 1);
-	D.insertFront('b', 1);
-	D.insertFront('c', 1);
-*/
-	std::stringstream ss(inStr);
+	std::stringstream ss(inStr);		// add expression to stringstream
 
-//	D.insertFront(ss.get(), 1);
-
+	// BEGIN push characters from expression onto stack
 	while(!ss.eof()) {
-		D.insertFront(ss.get(), 1);
-		std::cout << "DONE2 (" << D.front() << ')';
+		std::string g;
+		g += ss.get();
+		D.insertFront(g, 1);
 	}
-
 	D.removeFront();
-//	std::cout << "DONE3\n";
-	std::cout << D.printList() << '\n';
+	// END push characters from expression onto stack
 
-	return "\nWow!";
+	return D.printList();
 }
 
 /*std::string NotationConverter::postfixToPrefix(std::string inStr);
