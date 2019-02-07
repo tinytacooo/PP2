@@ -60,7 +60,7 @@ void Deque::insertFront(const std::string &s, const int &pr) {
 
 const std::string Deque::removeBack() {
 	struct Node *temp = tail->prev;		// 
-	std::string s = tail->str;				// store character to return
+	std::string s = tail->str;			// store character to return
 	tail = tail->prev;					// 
 
 		if(tail != NULL) {		

@@ -9,7 +9,6 @@
 
 #include "NotationConverterInterface.hpp"
 #include "Deque.hpp"
-#include <locale>
 
 
 /*------------------------*
@@ -29,6 +28,7 @@ public:
 	*/
 
 	/* Helper functions */
+	bool isAlpha(const std::string &s);
 	bool isOperator(const std::string &s);
 	bool isSpace(const std::string &s);
 };
