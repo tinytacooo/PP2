@@ -9,6 +9,7 @@
 
 #include "NotationConverterInterface.hpp"
 #include "Deque.hpp"
+#include <locale>
 
 
 /*------------------------*
@@ -16,6 +17,7 @@
  *------------------------*/
 class NotationConverter : public NotationConverterInterface {
 public:
+	/* From NotationConverterInterface */
 	std::string postfixToInfix(std::string inStr);
 	/* std::string postfixToPrefix(std::string inStr);
 
@@ -25,6 +27,10 @@ public:
 	std::string prefixToInfix(std::string inStr);
 	std::string prefixToPostfix(std::string inStr);
 	*/
+
+	/* Helper functions */
+	bool isOperator(const std::string &s);
+	bool isSpace(const std::string &s);
 };
 
 #endif /* NOTATIONCONVERTER_H */

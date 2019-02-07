@@ -15,7 +15,7 @@ int main() {
 		switch(op) {
 			case 1: { 
 				std::cout << "CASE1 \n";
-				std::string s = "Hello, world!";
+				std::string s = "V C +";
 				std::string r;
 
 				r = NC.postfixToInfix(s);

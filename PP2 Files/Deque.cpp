@@ -101,7 +101,7 @@ std::string Deque::printList() {
 	struct Node* ptr = head;
 
 	while (ptr != NULL) {
-		ss << ' ' << ptr->str << ' ';
+		ss << ptr->str;
 		ptr = ptr->next;
 	}
 
