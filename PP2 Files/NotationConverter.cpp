@@ -18,32 +18,40 @@ std::string NotationConverter::postfixToInfix(std::string inStr) {
 
 	// BEGIN push characters from expression onto stack
 	while(!ss.eof()) {
+		std::cout << " >> START\n"; 
+
 		std::string temp;			// temp string to add character to Deque
 		temp += ss.get();			// add character from string stream to temp variable
+
+		std::cout << " >> TEMP: " << temp << '\n';
 
 		if(isSpace(temp)) {
 			continue;
 		}
 		else if(isOperator(temp)) {
-		/*	while(isAlpha(D.front()))
-				ret += D.removeFront();
-			ret += temp;
-			*/ std::cout << "FOUND OP\n";
+			std::cout << "FOUND OP\n";
+			std::cout << D.printListBackwards();
+			ret += D.removeFront();
+			// ret += "( " + D.removeFront() + " " + temp + " " + D.removeFront() + " )";
+			// D.insertFront(ret, 1);
+			std::cout << D.printList();
 		}
 		else if(isAlpha(temp)) {
-			D.insertBack(temp, 1);	// push contents of temp variable onto Deque
-			std::cout << "FOUND ALPHA\n";
+			std::cout << "ADDING ALPHA\n";
+			D.insertFront(temp);	// push contents of temp variable onto Deque
+			std::cout << " >> ADDED ALPHA " << temp << '\n';
 		}
 		else {
-			std::cout << "DID NOTHING\n";
+			// std::cout << "DID NOTHING\n";
 		}
 
-		
+		std::cout << " >> STACK\n" << D.printList() << '\n';
 	}
-	// D.removeFront();				// get rid of empty front node
+
+
 	// END push characters from expression onto stack
 
-	return ret;
+	return D.front();
 }
 
 /*std::string NotationConverter::postfixToPrefix(std::string inStr);

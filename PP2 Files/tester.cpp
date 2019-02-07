@@ -15,7 +15,7 @@ int main() {
 		switch(op) {
 			case 1: { 
 				std::cout << "CASE1 \n";
-				std::string s = "V C +";
+				std::string s = "X Y + A B + *";
 				std::string r;
 
 				r = NC.postfixToInfix(s);
@@ -26,10 +26,10 @@ int main() {
 			default: { break; }
 		}
 
-
 /*
+
 		std::cin >> op;
-		char c;
+		std::string c;
 
 		switch(op) {
 			case  1: { std::cin >> c; D.insertFront(c, 1); break; }

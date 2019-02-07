@@ -10,7 +10,6 @@
 #include "NotationConverterInterface.hpp"
 #include "Deque.hpp"
 
-
 /*------------------------*
  *   NOTATION CONVERTER   *
  *------------------------*/
