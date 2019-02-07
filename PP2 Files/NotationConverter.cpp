@@ -13,15 +13,14 @@
 std::string NotationConverter::postfixToInfix(std::string inStr) {
 	std::cout << "NC CALLED\n";
 	Deque D;
-/*
-	D.insertFront('a', 1);
+
+/*	D.insertFront('a', 1);
 	D.insertFront('b', 1);
 	D.insertFront('c', 1);
 */
 	std::stringstream ss(inStr);
-	std::cout << "DONE0 ";
 
-	// D.insertFront(ss.get(), 1);
+//	D.insertFront(ss.get(), 1);
 
 	while(!ss.eof()) {
 		D.insertFront(ss.get(), 1);
@@ -29,8 +28,8 @@ std::string NotationConverter::postfixToInfix(std::string inStr) {
 	}
 
 	D.removeFront();
-	std::cout << "DONE3\n";
-	std::cout << D.front() << ' ' << D.back() << '\n';
+//	std::cout << "DONE3\n";
+	std::cout << D.printList() << '\n';
 
 	return "\nWow!";
 }

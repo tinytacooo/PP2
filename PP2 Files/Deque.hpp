@@ -37,8 +37,8 @@ public:
 	/* Edit deque */
 	void insertBack(const char &ch, const int &pr);
 	void insertFront(const char &ch, const int &pr);
-	void removeBack();	// ADD THROWS
-	void removeFront();	// ADD THROWS
+	const char removeBack();	// ADD THROWS
+	const char removeFront();	// ADD THROWS
 	/* REMOVE - TEST FUNCTIONS */
 	std::string printList();
 private:

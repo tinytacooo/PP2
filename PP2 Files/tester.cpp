@@ -17,7 +17,6 @@ int main() {
 				std::cout << "CASE1 \n";
 				std::string s = "Hello, world!";
 				std::string r;
-				std::cout << "CASE1DONE0 \n";
 
 				r = NC.postfixToInfix(s);
 				std::cout << "CASE1DONE1 \n";
