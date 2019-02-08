@@ -18,13 +18,13 @@ enum PRECEDENCE {SUBTRACT, ADD, DIVIDE, MULTIPLY};
 class NotationConverter : public NotationConverterInterface {
 public:
 	/* From NotationConverterInterface */
-	std::string postfixToInfix(std::string inStr);
-	// std::string postfixToPrefix(std::string inStr);
+	// std::string postfixToInfix(std::string inStr);
+	std::string postfixToPrefix(std::string inStr);
 
 	std::string infixToPostfix(std::string inStr);
 	// std::string infixToPrefix(std::string inStr);
 
-	// std::string prefixToInfix(std::string inStr);
+	std::string prefixToInfix(std::string inStr);
 	// std::string prefixToPostfix(std::string inStr);
 
 	/* Helper functions */

@@ -9,6 +9,7 @@
 /*------------------------*
  *   NOTATION CONVERTER   *
  *------------------------*/
+
 std::string NotationConverter::postfixToInfix(std::string inStr) {
 	Deque D;						// initialize deque to use
 
@@ -41,7 +42,36 @@ std::string NotationConverter::postfixToInfix(std::string inStr) {
 	return D.getBack();
 }
 
-//std::string NotationConverter::postfixToPrefix(std::string inStr);
+std::string NotationConverter::postfixToPrefix(std::string inStr){
+	Deque D;						// initialize deque to use
+
+	std::stringstream ss(inStr);	// add expression to stringstream
+
+	while(!ss.eof()) {
+		std::string ret;			// string to return
+
+		std::string temp;			// temp string to add character to Deque
+		temp += ss.get();			// add character from string stream to temp variable
+
+		if(isSpace(temp)) {
+			continue;
+		}
+		else if(isAlpha(temp)) {
+			D.pushFront(temp);
+		}
+		else if(isOperator(temp)) {
+			ret += temp + " " + D.popFront() + " " + D.popFront(); 	// push contents of temp variable onto Deque
+			D.pushFront(ret);
+		} else {
+			continue;
+		}
+
+		// D.printList();
+
+	}
+	// std::cout << D.getBack();
+	return D.getBack();
+}
 
 std::string NotationConverter::infixToPostfix(std::string inStr) {
 	Deque D;				// initialize deque to use
@@ -103,7 +133,42 @@ std::string NotationConverter::infixToPostfix(std::string inStr) {
 
 //std::string NotationConverter::infixToPrefix(std::string inStr);
 
-//std::string NotationConverter::prefixToInfix(std::string inStr);
+std::string NotationConverter::prefixToInfix(std::string inStr) {
+	Deque D;				// initialize deque to use
+	std::string rev;
+
+	for(int i = inStr.length()-1; i > -1; i--)
+		rev += inStr.at(i);
+
+	std::stringstream ss(rev);	// add expression to stringstream
+
+	while(!ss.eof()) {
+		// std::cout << "CATCH1" << "" << "\n";
+		std::string ret;			// string to return
+		std::string temp;			// temp string to add character to Deque
+		temp += ss.get();			// add character from string stream to temp variable
+
+		//std::cout << "CATCH2" << "" << "\n";
+		if(isSpace(temp)) {
+			// std::cout << "CATCH3" << "" << "\n";
+			continue;
+		}
+		else if(isAlpha(temp)) {
+			// std::cout << "CATCH4a" << "" << "\n";
+			D.pushFront(temp);
+			// std::cout << "CATCH4b" << "" << "\n";
+		}
+		else if(isOperator(temp)) {
+			std::string temp_a = D.popFront();
+			std::string temp_b = D.popFront();
+			ret += "(" + temp_a + " " + temp + " " + temp_b + ")";
+			//D.popFront();
+			D.pushFront(ret);
+		}
+	}
+
+	return D.getBack();
+}
 
 //std::string NotationConverter::prefixToPostfix(std::string inStr);
 
@@ -119,8 +184,11 @@ bool NotationConverter::isOperator(const std::string &s) {
 }
 
 // this hurts my eyeees
-// thought it might be better than putting anothre library into the overhead for this program
+// thought it might be better than putting another library into the overhead for this program
 // #mightberight
+// turns out is is
+// guess what didn't work??
+// if((s>="a" && s<="z") || (s>="A" && s<="B"))
 bool NotationConverter::isAlpha(const std::string &s) {
 	bool ret = false;
 	if (s == "A" || s == "B" || s == "C" || s == "D" || s == "E" || s == "F" || s == "G" || s == "H" || s == "I" || s == "J" || s == "K" || s == "L" || s == "M" || s == "N" || s == "O" || s == "P" || s == "Q" || s == "R" ||s == "S" || s == "T" || s == "U" || s == "V" || s == "W" || s == "X" || s == "Y" || s == "Z" || s == "a" || s == "b" || s == "c" || s == "d" || s == "e" || s == "f" || s == "g" || s == "h" || s == "i" || s == "j" || s == "k" || s == "l" || s == "m" || s == "n" || s == "o" || s == "p" || s == "q" || s == "r" ||s == "s" || s == "t" || s == "u" || s == "v" || s == "w" || s == "x" || s == "y" || s == "z")
