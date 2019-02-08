@@ -7,9 +7,14 @@
 #include "NotationConverter.hpp"
 
 /*------------------------*
+ *						  *
  *   NOTATION CONVERTER   *
+ *						  *
  *------------------------*/
 
+/*----------------*
+ *   POST -> IN   *
+ *----------------*/
 std::string NotationConverter::postfixToInfix(std::string inStr) {
 	Deque D;						// initialize deque to use
 
@@ -20,6 +25,9 @@ std::string NotationConverter::postfixToInfix(std::string inStr) {
 
 		std::string temp;			// temp string to add character to Deque
 		temp += ss.get();			// add character from string stream to temp variable
+
+		if(temp == "[" || temp == "]" || temp == "\\" || temp == "{" || temp == "}" || temp == "^")
+			throw("Error: Bad input");
 
 		if(isSpace(temp)) {
 			continue;
@@ -35,13 +43,14 @@ std::string NotationConverter::postfixToInfix(std::string inStr) {
 			continue;
 		}
 
-		// D.printList();
-
 	}
-	// std::cout << D.getBack();
+
 	return D.getBack();
 }
 
+/*-----------------*
+ *   POST -> PRE   *
+ *-----------------*/
 std::string NotationConverter::postfixToPrefix(std::string inStr){
 	Deque D;						// initialize deque to use
 
@@ -52,6 +61,9 @@ std::string NotationConverter::postfixToPrefix(std::string inStr){
 
 		std::string temp;			// temp string to add character to Deque
 		temp += ss.get();			// add character from string stream to temp variable
+
+		if(temp == "[" || temp == "]" || temp == "\\" || temp == "{" || temp == "}" || temp == "^")
+			throw("Error: Bad input");
 
 		if(isSpace(temp)) {
 			continue;
@@ -66,13 +78,13 @@ std::string NotationConverter::postfixToPrefix(std::string inStr){
 			continue;
 		}
 
-		// D.printList();
-
 	}
-	// std::cout << D.getBack();
 	return D.getBack();
 }
 
+/*----------------*
+ *   IN -> POST   *
+ *----------------*/
 std::string NotationConverter::infixToPostfix(std::string inStr) {
 	Deque D;				// initialize deque to use
 	std::string ret;		// string to return
@@ -85,28 +97,26 @@ std::string NotationConverter::infixToPostfix(std::string inStr) {
 		std::string temp;			// temp string to add character to Deque
 		temp += ss.get();			// add character from string stream to temp variable
 
+		if(temp == "[" || temp == "]" || temp == "\\" || temp == "{" || temp == "}" || temp == "^")
+			throw("Error: Bad input");
+
 		if(isOperator(temp)) {					// if current symbol is an operator, assign precedence
 			curPrec = assignPrec(temp);
-			// std::cout << "  >> ASSIGNED PREC: " << temp << " " << curPrec << "\n";
 		}
 
 		if(isSpace(temp)) {						// skip spaces
-			// std::cout << "  >> FOUND SPACE\n";
 			continue;
 		}
 
 		else if(isAlpha(temp)) {
 			ret += " " + temp;
-			// std::cout << "  >> FOUND ALPHA " << temp << "\n";
 		}
 
 		else if(temp == "(") {
 			D.pushFront(temp);
-			// std::cout << "  >> FOUND (\n";
 		}
 
 		else if(temp == ")") {
-			// std::cout << "  >> FOUND )\n";
 			while(!D.isEmpty() && D.getFront() != "(")
 				ret += " " + D.popFront();
 
@@ -115,14 +125,12 @@ std::string NotationConverter::infixToPostfix(std::string inStr) {
 		}
 
 		else if(isOperator(temp)) {
-			// std::cout << "  >> FOUND OP\n";
 			while(!D.isEmpty() && curPrec <= assignPrec(D.getFront()))
 				ret += " " + D.popFront();
 
 			D.pushFront(temp);
 		}
 
-		// D.printList();
 	}
 
 	while(!D.isEmpty())
@@ -131,8 +139,17 @@ std::string NotationConverter::infixToPostfix(std::string inStr) {
 	return ret.substr(1);
 }
 
-//std::string NotationConverter::infixToPrefix(std::string inStr);
+/*---------------*
+ *   IN -> PRE   *
+ *---------------*/
+std::string NotationConverter::infixToPrefix(std::string inStr) {
+	std::string post = infixToPostfix(inStr);
+	return postfixToPrefix(post);
+}
 
+/*---------------*
+ *   PRE -> IN   *
+ *---------------*/
 std::string NotationConverter::prefixToInfix(std::string inStr) {
 	Deque D;				// initialize deque to use
 	std::string rev;
@@ -148,21 +165,21 @@ std::string NotationConverter::prefixToInfix(std::string inStr) {
 		std::string temp;			// temp string to add character to Deque
 		temp += ss.get();			// add character from string stream to temp variable
 
+		if(temp == "[" || temp == "]" || temp == "\\" || temp == "{" || temp == "}" || temp == "^")
+			throw("Error: Bad input");
+
 		//std::cout << "CATCH2" << "" << "\n";
 		if(isSpace(temp)) {
-			// std::cout << "CATCH3" << "" << "\n";
 			continue;
 		}
 		else if(isAlpha(temp)) {
-			// std::cout << "CATCH4a" << "" << "\n";
 			D.pushFront(temp);
-			// std::cout << "CATCH4b" << "" << "\n";
 		}
 		else if(isOperator(temp)) {
 			std::string temp_a = D.popFront();
 			std::string temp_b = D.popFront();
 			ret += "(" + temp_a + " " + temp + " " + temp_b + ")";
-			//D.popFront();
+
 			D.pushFront(ret);
 		}
 	}
@@ -170,10 +187,19 @@ std::string NotationConverter::prefixToInfix(std::string inStr) {
 	return D.getBack();
 }
 
-//std::string NotationConverter::prefixToPostfix(std::string inStr);
+/*-----------------*
+ *   PRE -> POST   *
+ *-----------------*/
+std::string NotationConverter::prefixToPostfix(std::string inStr) {
+	std::string in = prefixToInfix(inStr);
+	return infixToPostfix(in);
+}
+
 
 /*----------------------------------*
+ *									*
  *   NOTATION CONVERTER - HELPERS   *
+ *									*
  *----------------------------------*/
 
 bool NotationConverter::isOperator(const std::string &s) {
@@ -192,6 +218,7 @@ bool NotationConverter::isOperator(const std::string &s) {
 bool NotationConverter::isAlpha(const std::string &s) {
 	bool ret = false;
 	if (s == "A" || s == "B" || s == "C" || s == "D" || s == "E" || s == "F" || s == "G" || s == "H" || s == "I" || s == "J" || s == "K" || s == "L" || s == "M" || s == "N" || s == "O" || s == "P" || s == "Q" || s == "R" ||s == "S" || s == "T" || s == "U" || s == "V" || s == "W" || s == "X" || s == "Y" || s == "Z" || s == "a" || s == "b" || s == "c" || s == "d" || s == "e" || s == "f" || s == "g" || s == "h" || s == "i" || s == "j" || s == "k" || s == "l" || s == "m" || s == "n" || s == "o" || s == "p" || s == "q" || s == "r" ||s == "s" || s == "t" || s == "u" || s == "v" || s == "w" || s == "x" || s == "y" || s == "z")
+
 		ret = true;
 	return ret;
 }

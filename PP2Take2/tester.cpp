@@ -37,9 +37,15 @@ int main() {
 			case 6: { r = NC.prefixToInfix(prefix1); break; }
 			case 7: { r = NC.prefixToInfix(prefix2); break; }
 
-/*			case 8: { std::string r = NC.postfixToInfix(postfix2); break; }
-			case 9: { std::string r = NC.postfixToInfix(postfix2); break; }
-*/
+			case 8: { r = NC.postfixToInfix(postfix2); break; }
+			case 9: { r = NC.postfixToInfix(postfix3); break; }
+
+			case 10: { r = NC.infixToPrefix(infix2); break; }
+			case 11: { r = NC.infixToPrefix(infix3); break; }
+
+			case 12: { r = NC.prefixToPostfix(prefix1); break; }
+			case 13: { r = NC.prefixToPostfix(prefix3); break; }
+
 			case 0: { break; }
 			default: { break; }
 		}
