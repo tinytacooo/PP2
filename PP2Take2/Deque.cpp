@@ -1,15 +1,10 @@
-#include "Deque.hpp"
+/*-----------------------*
+   Deque.hpp
+   Kelly Johnston
+   COP 4530 Spring: PP2
+ *-----------------------*/
 
-/*
-~Deque::Deque() {
-	Node* temp;
-	while(head != NULL) {
-		temp = head;
-		head = head.next;
-		free(temp);
-	}
-}
-*/
+#include "Deque.hpp"
 
 void Deque::pushFront(const std::string &s) {
 	if (front == -1 && back == -1) {

@@ -1,10 +1,17 @@
+/*-----------------------*
+   Deque.hpp
+   Kelly Johnston
+   COP 4530 Spring: PP2
+ *-----------------------*/
+
 #ifndef DEQUE_H
 #define DEQUE_H
 
 #include <string>
 #include <iostream>
+#include <sstream>
 
-const int MAX = 4;
+const int MAX = 5;
 
 class Deque {
 private:
