@@ -20,9 +20,6 @@ private:
 	int back = -1;
 	int size = 0;
 public:
-	// Deque();
-	// ~List();
-
 	/* Edit Deque */
 	void pushFront(const std::string &s);
 	void pushBack(const std::string &s);
@@ -36,7 +33,7 @@ public:
 	const std::string getFront() { return arr[front]; }
 	const std::string getBack() { return arr[back]; }
 
-	/* Tester functions - REMOVE */
+	/* Tester functions - DISREGARD */
 	void printList();
 };
 #endif

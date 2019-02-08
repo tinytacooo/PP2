@@ -18,7 +18,7 @@
 std::string NotationConverter::postfixToInfix(std::string inStr) {
 	Deque D;						// initialize deque to use
 
-	std::stringstream ss(inStr);	// add expression to stringstream
+	std::stringstream ss(inStr);	// string to concat operators and operands to push onto stack
 
 	while(!ss.eof()) {
 		std::string ret;			// string to return
@@ -26,26 +26,35 @@ std::string NotationConverter::postfixToInfix(std::string inStr) {
 		std::string temp;			// temp string to add character to Deque
 		temp += ss.get();			// add character from string stream to temp variable
 
-		if(temp == "[" || temp == "]" || temp == "\\" || temp == "{" || temp == "}" || temp == "^")
+		if(isBadInput(temp))			// non-alpha, non-operator and non-space characters will throw an error
 			throw("Error: Bad input");
 
+		// skip spaces
 		if(isSpace(temp)) {
 			continue;
 		}
+
+		// when operator is encountered, surround it with relevant operands and push it onto the stack
+		// as expressions are pushed onto the stack, concatenated expressions become operands that are being popped from the stack
 		else if(isOperator(temp)) {
 			ret += "(" + D.popFront() + " " + temp + " " + D.popFront() + ")";
 			D.popFront();
 			D.pushFront(ret);
 		}
+
+		// operands are just pushed onto the stack for later use
 		else if(isAlpha(temp)) {
 			D.pushFront(temp);	// push contents of temp variable onto Deque
-		} else {
+		}
+
+		// I think my function reached a null character at some point... this is to skip it if that happens.
+		else {
 			continue;
 		}
 
 	}
 
-	return D.getBack();
+	return D.getBack();		// last expression left in the stack is the converted expression
 }
 
 /*-----------------*
@@ -62,24 +71,33 @@ std::string NotationConverter::postfixToPrefix(std::string inStr){
 		std::string temp;			// temp string to add character to Deque
 		temp += ss.get();			// add character from string stream to temp variable
 
-		if(temp == "[" || temp == "]" || temp == "\\" || temp == "{" || temp == "}" || temp == "^")
+		if(isBadInput(temp))			// non-alpha, non-operator and non-space characters will throw an error
 			throw("Error: Bad input");
 
+		// skip spaces
 		if(isSpace(temp)) {
 			continue;
 		}
+
+		// push operands onto stack
 		else if(isAlpha(temp)) {
 			D.pushFront(temp);
 		}
+
+		// when an operator is encountered, list operator followed by two operands
+		// again, as expressions are pushed onto the stack, they become 'operands' that are being concatenated with the operator
 		else if(isOperator(temp)) {
 			ret += temp + " " + D.popFront() + " " + D.popFront(); 	// push contents of temp variable onto Deque
 			D.pushFront(ret);
-		} else {
-			continue;
 		}
 
+		// skip possible bull characters
+		else {
+			continue;
+		}
 	}
-	return D.getBack();
+
+	return D.getBack();		// last expression in the stack is the converted expression
 }
 
 /*----------------*
@@ -87,7 +105,7 @@ std::string NotationConverter::postfixToPrefix(std::string inStr){
  *----------------*/
 std::string NotationConverter::infixToPostfix(std::string inStr) {
 	Deque D;				// initialize deque to use
-	std::string ret;		// string to return
+	std::string ret;		// string to return - operators and operands will be concatenated into this string
 
 	std::stringstream ss(inStr);	// add expression to stringstream
 
@@ -97,53 +115,53 @@ std::string NotationConverter::infixToPostfix(std::string inStr) {
 		std::string temp;			// temp string to add character to Deque
 		temp += ss.get();			// add character from string stream to temp variable
 
-		if(temp == "[" || temp == "]" || temp == "\\" || temp == "{" || temp == "}" || temp == "^")
+		if(isBadInput(temp))
 			throw("Error: Bad input");
 
 		if(isOperator(temp)) {					// if current symbol is an operator, assign precedence
-			curPrec = assignPrec(temp);
+			curPrec = assignPrec(temp);			// (see helper function below for values)
 		}
 
 		if(isSpace(temp)) {						// skip spaces
 			continue;
 		}
 
-		else if(isAlpha(temp)) {
+		else if(isAlpha(temp)) {				// add space + operand to return string
 			ret += " " + temp;
 		}
 
-		else if(temp == "(") {
+		else if(temp == "(") {					// push opening parenthesis onto stack
 			D.pushFront(temp);
 		}
 
 		else if(temp == ")") {
-			while(!D.isEmpty() && D.getFront() != "(")
-				ret += " " + D.popFront();
+			while(!D.isEmpty() && D.getFront() != "(")		// when a closing parenthesis is encountered, pop items from stack until
+				ret += " " + D.popFront();					// parenthesis is closed (by the corresponding opoeining parenthesis)
 
-			if(!D.isEmpty() && D.getFront() == "(")
+			if(!D.isEmpty() && D.getFront() == "(")			// get rid of opening parenthesis on stack
 				D.popFront();
 		}
 
 		else if(isOperator(temp)) {
-			while(!D.isEmpty() && curPrec <= assignPrec(D.getFront()))
+			while(!D.isEmpty() && curPrec <= assignPrec(D.getFront()))		// add operators with smaller precedence to return variable 
 				ret += " " + D.popFront();
 
-			D.pushFront(temp);
+			D.pushFront(temp);												// push current operator onto stack - deal with it later
 		}
 
 	}
 
-	while(!D.isEmpty())
+	while(!D.isEmpty())					// when initial expression is empty and sorted, pop off all the remaining operators/operands
 		ret += " " + D.popFront();
 
-	return ret.substr(1);
+	return ret.substr(1);				// return concatenated expression; get rid of space in front of it
 }
 
 /*---------------*
  *   IN -> PRE   *
  *---------------*/
 std::string NotationConverter::infixToPrefix(std::string inStr) {
-	std::string post = infixToPostfix(inStr);
+	std::string post = infixToPostfix(inStr);		// convert infix -> postfix -> prefix using existing expressions
 	return postfixToPrefix(post);
 }
 
@@ -160,38 +178,36 @@ std::string NotationConverter::prefixToInfix(std::string inStr) {
 	std::stringstream ss(rev);	// add expression to stringstream
 
 	while(!ss.eof()) {
-		// std::cout << "CATCH1" << "" << "\n";
 		std::string ret;			// string to return
 		std::string temp;			// temp string to add character to Deque
 		temp += ss.get();			// add character from string stream to temp variable
 
-		if(temp == "[" || temp == "]" || temp == "\\" || temp == "{" || temp == "}" || temp == "^")
+		if(isBadInput(temp))			// throw error if bad input
 			throw("Error: Bad input");
 
-		//std::cout << "CATCH2" << "" << "\n";
-		if(isSpace(temp)) {
+		if(isSpace(temp)) {							// skip spaces
 			continue;
 		}
-		else if(isAlpha(temp)) {
+		else if(isAlpha(temp)) {					// push operands onto stack
 			D.pushFront(temp);
 		}
-		else if(isOperator(temp)) {
-			std::string temp_a = D.popFront();
+		else if(isOperator(temp)) {					// if operator is encountered, surround it with relevant operands and push onto stack
+			std::string temp_a = D.popFront();		// eventually, the whole converted expression will be pushed onto the stack
 			std::string temp_b = D.popFront();
 			ret += "(" + temp_a + " " + temp + " " + temp_b + ")";
 
-			D.pushFront(ret);
+			D.pushFront(ret);						// push concat expression onto stack
 		}
 	}
 
-	return D.getBack();
+	return D.getBack();								// return converted expression
 }
 
 /*-----------------*
  *   PRE -> POST   *
  *-----------------*/
 std::string NotationConverter::prefixToPostfix(std::string inStr) {
-	std::string in = prefixToInfix(inStr);
+	std::string in = prefixToInfix(inStr);		// convert prefix -> infix -> postfix using existing functions
 	return infixToPostfix(in);
 }
 
@@ -202,6 +218,7 @@ std::string NotationConverter::prefixToPostfix(std::string inStr) {
  *									*
  *----------------------------------*/
 
+// check for four allowed operators
 bool NotationConverter::isOperator(const std::string &s) {
 	bool ret = false;
 	if (s == "+" || s == "-" || s == "*" || s == "/")
@@ -222,6 +239,7 @@ bool NotationConverter::isAlpha(const std::string &s) {
 	return ret;
 }
 
+// Hollywoo Stars and Celebrities: What Do They Know? Is This Character a Space? Do They Know Things?> Let's Find Out!
 bool NotationConverter::isSpace(const std::string &s) {
 	bool ret = false;
 	if (s == " ")
@@ -229,13 +247,15 @@ bool NotationConverter::isSpace(const std::string &s) {
 	return ret;
 }
 
+// check for non-alpha, non-space, non-operator characters
 bool NotationConverter::isBadInput(const std::string &s) {
 	bool ret = false;
-	if (s == "!" || s == "@" || s == "#" || s == "%" || s == "^" || s == "&" || s == "_" || s == "=" || s == "{" || s == "}" || s == "[" || s == "]" || s == "|" || s == "\\" || s == "\"" || s == "'" || s == "<" || s == ">" ||s == "," || s == "." || s == "~" || s == "`" || s == "?")
+	if (s == "!" || s == "@" || s == "#" || s == "%" || s == "^" || s == "&" || s == "_" || s == "=" || s == "{" || s == "}" || s == "[" || s == "]" || s == "|" || s == "\\" || s == "\"" || s == "'" || s == "<" || s == ">" ||s == "," || s == "." || s == "~" || s == "`" || s == "?" || s == "1" || s == "2" || s == "3" || s == "4" || s == "5" || s == "6" || s == "7" || s == "8" || s == "9" || s == "0")
 		ret = true;
 	return ret;
 }
 
+// assign precedence to operator. Probably could have put this in isOpertor(). Oh well `\( :) )/`
 int NotationConverter::assignPrec(const std::string &s) {
 	int ret;
 	if(s == "+")
